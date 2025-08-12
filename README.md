@@ -1,2 +1,2 @@
-# xzr
+# scan document
 scan document 
