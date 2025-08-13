@@ -21,7 +21,7 @@ class DocScanner(object):
         dilated = cv2.morphologyEx(gray, cv2.MORPH_CLOSE, kernel)
         edged = cv2.Canny(dilated, 0, 84)
 
-        # 查找轮廓（只保留面积大于5000的轮廓）
+        # 查找轮廓（只保留面积大于50000的轮廓）
         cnts, _ = cv2.findContours(edged.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         cnts = [c for c in cnts if cv2.contourArea(c) > self.MIN_CONTOUR_AREA]  # 新增面积过滤
         cnts = sorted(cnts, key=cv2.contourArea, reverse=True)[:5]  # 取前5大面积轮廓
@@ -35,4 +35,5 @@ class DocScanner(object):
 
         # 如果没找到符合条件的轮廓，返回整个图像边界
         h, w = rescaled_image.shape[:2]
+
         return np.array([[w, 0], [w, h], [0, h], [0, 0]], dtype="float32")
