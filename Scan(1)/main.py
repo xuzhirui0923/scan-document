@@ -4,15 +4,26 @@ import os
 from utils import resize, cv_show, four_point_transform, get_screenCnt, get_rotated_img, ocr_check
 from length import calculateWH
 from edgeseek import DocScanner
+from Clip import Clip
 
 # 读取图片
-image = cv2.imread('images/page.jpg')
+image = cv2.imread("images/receipt.jpg")
 
 
 def img_ocr(image):
-    h, w = image.shape[0:2]
-    gray = cv2.medianBlur(image, 3)
-    orig = image.copy()
+    # 直接传入图像数组
+    clip = Clip(image)
+    cropped_image = clip.run()
+
+    if cropped_image is not None:
+        output_path = os.path.abspath("cropped_result.jpg")
+        cv2.imwrite(output_path, cropped_image)
+        print(f"结果已保存到: {output_path}")
+
+
+    h, w = cropped_image.shape[0:2]
+    gray = cv2.medianBlur(cropped_image, 3)
+    orig = cropped_image.copy()
     image = resize(orig, height=h)
     ratio = orig.shape[0] / float(image.shape[0])
 
