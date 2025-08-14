@@ -49,7 +49,7 @@ def img_ocr(image):
 
 
 
-    # 二值处理
+    # 转为灰度图
     warped = cv2.cvtColor(warped, cv2.COLOR_BGR2GRAY)
 
     # 灰度图像直方图均衡化
@@ -61,7 +61,7 @@ def img_ocr(image):
     threshold_value = 240
     ref = np.where(dst > threshold_value, 255, dst)
 
-
+    # 二值化
     # ref = cv2.threshold(img_processed, 150, 255, cv2.THRESH_BINARY)[1]
     cv2.imwrite('result/AW.jpg',ref)
     print(int(calculateWH(screenCnt)[1]))
@@ -71,3 +71,4 @@ def img_ocr(image):
 
 
 text = img_ocr(image)
+
