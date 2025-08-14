@@ -11,6 +11,8 @@ def cv_show(title, img):
     cv2.imshow(title, img)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
+
+
 # def resize(image, width=None, height=None, inter=cv2.INTER_AREA):
 #     """resize函数之所以自定义，是可以只指定高度或者高度
 #         原理就是：
@@ -29,6 +31,7 @@ def cv_show(title, img):
 #         dim = (width, int(h*r))
 #     resized = cv2.resize(image, dim, interpolation=inter)
 #     return resized
+
 def resize(image, width=None, height=None, inter=cv2.INTER_AREA):
     (h, w) = image.shape[:2]
     if width is None and height is None:
@@ -40,6 +43,8 @@ def resize(image, width=None, height=None, inter=cv2.INTER_AREA):
         r = width / float(w)
         dim = (int(width), int(h * r))  # 确保两个值都是整数
     return cv2.resize(image, dim, interpolation=inter)
+
+
 def order_points(pts):
     # 一共4个坐标点
     rect = np.zeros((4, 2), dtype="float32")
@@ -58,6 +63,8 @@ def order_points(pts):
     rect[1] = pts[np.argmin(diff)]
     rect[3] = pts[np.argmax(diff)]
     return rect
+
+
 def four_point_transform(image, pts):
     # 拿到正确的左上，右上， 右下，左下四个坐标点的位置
     rect = order_points(pts)
@@ -93,6 +100,8 @@ def four_point_transform(image, pts):
 
     # 返回变换后结果
     return warped
+
+
 def get_screenCnt(cnts):
     screenCnt = None  # 初始化，防止未找到轮廓时返回未定义变量
 
@@ -108,6 +117,8 @@ def get_screenCnt(cnts):
         print("警告：未找到四边形轮廓！")
 
     return screenCnt  # 可能返回 Non
+
+
 def get_rotated_img(ref):
     rows, cols = ref.shape[:2]
     center = (cols / 2, rows / 2)  # 以图像中心为旋转中心
@@ -118,6 +129,8 @@ def get_rotated_img(ref):
     rotated_img = cv2.warpAffine(ref, M, (cols, rows))
 
     return rotated_img
+
+
 def ocr_check(image, preprocess='thresh'):
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     # 滤波或者二值化下，使得图片更加清楚

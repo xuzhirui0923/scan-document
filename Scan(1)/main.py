@@ -7,7 +7,7 @@ from edgeseek import DocScanner
 from Clip import Clip
 
 # 读取图片
-image = cv2.imread("images/receipt.jpg")
+image = cv2.imread("images/test5.jpg")
 
 
 def img_ocr(image):
@@ -16,7 +16,7 @@ def img_ocr(image):
     cropped_image = clip.run()
 
     if cropped_image is not None:
-        output_path = os.path.abspath("cropped_result.jpg")
+        output_path = os.path.abspath("images/ropped_result.jpg")
         cv2.imwrite(output_path, cropped_image)
         print(f"结果已保存到: {output_path}")
 
@@ -45,14 +45,29 @@ def img_ocr(image):
 
     # 透视变换
     warped = four_point_transform(orig, screenCnt.reshape(4, 2) * ratio)
+    cv2.imwrite("images/warped.jpg",warped)
+
+
+
     # 二值处理
     warped = cv2.cvtColor(warped, cv2.COLOR_BGR2GRAY)
-    ref = cv2.threshold(warped, 150, 255, cv2.THRESH_BINARY)[1]
-    cv2.imwrite('AW.jpg',ref)
+
+    # 灰度图像直方图均衡化
+    alpha = 1.5  # 对比度系数
+
+    beta = -50  # 亮度调整
+    dst = cv2.convertScaleAbs(warped, alpha=alpha, beta=beta)
+
+    threshold_value = 240
+    ref = np.where(dst > threshold_value, 255, dst)
+
+
+    # ref = cv2.threshold(img_processed, 150, 255, cv2.THRESH_BINARY)[1]
+    cv2.imwrite('result/AW.jpg',ref)
     print(int(calculateWH(screenCnt)[1]))
     resize_img = resize(ref, height=int(calculateWH(screenCnt)[1])*2, width=int(calculateWH(screenCnt)[0])*2)
     # 保存到文件
-    cv2.imwrite('scan1.jpg', resize_img)
+    cv2.imwrite('result/scan5.jpg', resize_img)
 
 
 text = img_ocr(image)
